@@ -1,0 +1,148 @@
+@use '../variables' as vars;
+@use 'sass:map';
+@use 'sass:color';
+
+.products-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: map.get(vars.$spacing, 'xl');
+
+  &__filters {
+    display: flex;
+    flex-direction: column;
+    gap: map.get(vars.$spacing, 'md');
+    margin-bottom: map.get(vars.$spacing, 'xl');
+
+    @media (min-width: map.get(vars.$breakpoints, 'md')) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  &__search {
+    flex-grow: 1;
+    padding: map.get(vars.$spacing, 'sm');
+    border: 1px solid map.get(vars.$colors, 'border');
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: 2px solid map.get(vars.$colors, 'primary');
+      outline-offset: 2px;
+    }
+
+    &::placeholder {
+      color: map.get(vars.$colors, 'text-secondary');
+    }
+  }
+
+  &__filter {
+    position: relative;
+    padding: map.get(vars.$spacing, 'sm') map.get(vars.$spacing, 'xl') map.get(vars.$spacing, 'sm') map.get(vars.$spacing, 'md');
+    border: 1px solid map.get(vars.$colors, 'border');
+    border-radius: 4px;
+    background-color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: 2px solid map.get(vars.$colors, 'primary');
+      outline-offset: 2px;
+    }
+  }
+
+  &__create-button {
+    padding: map.get(vars.$spacing, 'sm') map.get(vars.$spacing, 'md');
+    background-color: map.get(vars.$colors, 'primary');
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: color.adjust(
+        map.get(vars.$colors, 'primary'), 
+        $lightness: -10%
+      );
+    }
+  }
+
+  &__grid {
+    display: grid;
+    gap: map.get(vars.$spacing, 'lg');
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+.error-container {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: map.get(vars.$spacing, 'xl');
+  background-color: color.adjust(
+    map.get(vars.$colors, 'danger'), 
+    $alpha: -0.9
+  );
+  border-radius: 8px;
+  border: 1px solid map.get(vars.$colors, 'danger');
+
+  .error-message {
+    color: map.get(vars.$colors, 'danger');
+    font-size: 1.1rem;
+    margin-bottom: map.get(vars.$spacing, 'md');
+  }
+}
+
+.retry-buttons {
+  display: flex;
+  gap: map.get(vars.$spacing, 'sm');
+  justify-content: center;
+
+  button {
+    padding: map.get(vars.$spacing, 'xs') map.get(vars.$spacing, 'md');
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:first-child {
+      background-color: map.get(vars.$colors, 'primary');
+      color: white;
+
+      &:hover {
+        background-color: color.adjust(
+          map.get(vars.$colors, 'primary'), 
+          $lightness: -10%
+        );
+      }
+    }
+
+    &:last-child {
+      background-color: map.get(vars.$colors, 'background');
+      color: map.get(vars.$colors, 'text');
+      border: 1px solid map.get(vars.$colors, 'border');
+
+      &:hover {
+        background-color: color.adjust(
+          map.get(vars.$colors, 'background'), 
+          $lightness: -5%
+        );
+      }
+    }
+  }
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: map.get(vars.$spacing, 'xl');
+  color: map.get(vars.$colors, 'text-secondary');
+  font-size: 1.1rem;
+}

@@ -1,0 +1,94 @@
+@use '../variables' as vars;
+@use 'sass:map';
+@use 'sass:color';
+
+.product-card {
+  position: relative;
+  background: white;
+  border: 1px solid map.get(vars.$colors, 'border');
+  border-radius: 8px;
+  padding: map.get(vars.$spacing, 'md');
+  transition: box-shadow 0.2s ease;
+  overflow: hidden;
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  &:hover {
+    box-shadow: 0 4px 6px rgba(map.get(vars.$colors, 'text'), 0.1);
+  }
+
+
+  &__actions {
+    position: absolute;
+    top: map.get(vars.$spacing, 'sm');
+    right: map.get(vars.$spacing, 'sm');
+    display: flex;
+    gap: map.get(vars.$spacing, 'xs');
+    z-index: 10;
+  }
+
+  &__button {
+    padding: map.get(vars.$spacing, 'xs');
+    background: white;
+    border-radius: 999px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+
+    &:hover {
+      background: color.adjust(white, $lightness: -5%);
+    }
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: map.get(vars.$colors, 'text-secondary');
+    }
+
+    .liked {
+      color: map.get(vars.$colors, 'danger');
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: map.get(vars.$spacing, 'md');
+    border-radius: 4px;
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: map.get(vars.$colors, 'text');
+    margin-bottom: map.get(vars.$spacing, 'xs');
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__description {
+    color: map.get(vars.$colors, 'text-secondary');
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: map.get(vars.$spacing, 'sm');
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: map.get(vars.$colors, 'text');
+  }
+}

@@ -1,0 +1,82 @@
+@use '../variables' as vars;
+@use 'sass:map';
+@use 'sass:color';
+
+.product-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: map.get(vars.$spacing, 'xl');
+
+  &__back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: map.get(vars.$spacing, 'xs');
+    margin-bottom: map.get(vars.$spacing, 'lg');
+    padding: map.get(vars.$spacing, 'sm') map.get(vars.$spacing, 'md');
+    background-color: map.get(vars.$colors, 'background');
+    color: map.get(vars.$colors, 'primary');
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+
+    &:hover {
+      background-color: color.adjust(
+        map.get(vars.$colors, 'background'), 
+        $lightness: -3%
+      );
+      
+      .arrow {
+        transform: translateX(-3px);
+      }
+    }
+  }
+
+  &__card {
+    background: white;
+    border: 1px solid map.get(vars.$colors, 'border');
+    border-radius: 8px;
+    padding: map.get(vars.$spacing, 'xl');
+    box-shadow: 0 2px 8px rgba(map.get(vars.$colors, 'text'), 0.05);
+  }
+
+  &__image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    margin-bottom: map.get(vars.$spacing, 'lg');
+    border-radius: 4px;
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: map.get(vars.$spacing, 'md');
+    color: map.get(vars.$colors, 'text');
+  }
+
+  &__description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: map.get(vars.$spacing, 'lg');
+    color: map.get(vars.$colors, 'text-secondary');
+  }
+
+  &__price {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: map.get(vars.$colors, 'primary');
+  }
+
+  .arrow {
+    font-size: 1.25rem;
+    transition: transform 0.2s ease;
+  }
+}
+
+.product-not-found {
+  text-align: center;
+  padding: map.get(vars.$spacing, 'xl');
+  font-size: 1.5rem;
+  color: map.get(vars.$colors, 'danger');
+}
