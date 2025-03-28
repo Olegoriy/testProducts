@@ -12,6 +12,7 @@ interface StoreState {
   toggleLike: (id: number) => void;
   deleteProduct: (id: number) => void;
   addProduct: (product: Omit<Product, 'id'>) => void;
+  updateProduct: (id: number, updatedProduct: Partial<Product>) => Promise<void>;
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -24,18 +25,15 @@ export const useStore = create<StoreState>((set) => ({
     set({ loading: true, error: null });
     try {
       const data = await fetchWithRetry();
-      
       set({
         products: data,
         loading: false,
         error: null
       });
-      
       localStorage.setItem('cachedProducts', JSON.stringify(data));
     } catch (error) {
       console.error('API Error:', error);
       const cached = localStorage.getItem('cachedProducts');
-      
       set({
         products: cached ? JSON.parse(cached) : mockProducts,
         error: error instanceof Error ? error.message : 'Failed to fetch products',
@@ -47,6 +45,9 @@ export const useStore = create<StoreState>((set) => ({
   toggleLike: (id) => set((state) => ({
     products: state.products.map(product => 
       product.id === id ? {...product, liked: !product.liked} : product
+    ),
+    userProducts: state.userProducts.map(product => 
+      product.id === id ? {...product, liked: !product.liked} : product
     )
   })),
 
@@ -57,5 +58,15 @@ export const useStore = create<StoreState>((set) => ({
 
   addProduct: (product) => set((state) => ({
     userProducts: [...state.userProducts, { ...product, id: Date.now() }]
-  }))
-}));
+  })),
+
+  updateProduct: async (id, updatedProduct) => {
+    set((state) => ({
+      products: state.products.map(p => 
+        p.id === id ? { ...p, ...updatedProduct } : p
+      ),
+      userProducts: state.userProducts.map(p => 
+        p.id === id ? { ...p, ...updatedProduct } : p
+      )
+    }))
+}}));
