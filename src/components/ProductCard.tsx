@@ -8,10 +8,13 @@ export default function ProductCard({ product }: { product: Product }) {
   const { toggleLike, deleteProduct} = useStore();
   const navigate = useNavigate();
 
+  const price = typeof product.price === 'number' 
+    ? product.price 
+    : parseFloat(product.price);
+
   return (
     <div className="product-card">
       <div className="product-card__actions">
-        {/* Кнопка редактирования */}
         <button
           onClick={() => navigate(`/edit-product/${product.id}`)}
           className="product-card__button"
@@ -20,7 +23,6 @@ export default function ProductCard({ product }: { product: Product }) {
           <PencilIcon className="product-card__icon" />
         </button>
 
-        {/* Кнопка лайка */}
         <button 
           onClick={() => toggleLike(product.id)}
           className="product-card__button"
@@ -29,7 +31,7 @@ export default function ProductCard({ product }: { product: Product }) {
           <HeartIcon className={`product-card__icon ${product.liked ? 'liked' : ''}`} />
         </button>
 
-        { (
+        {(
           <button 
             onClick={() => deleteProduct(product.id)}
             className="product-card__button"
@@ -48,7 +50,7 @@ export default function ProductCard({ product }: { product: Product }) {
         />
         <h3 className="product-card__title">{product.title}</h3>
         <p className="product-card__description">{product.description}</p>
-        <p className="product-card__price">${product.price.toFixed(2)}</p>
+        <p className="product-card__price">${price.toFixed(2)}</p>
       </Link>
     </div>
   );
