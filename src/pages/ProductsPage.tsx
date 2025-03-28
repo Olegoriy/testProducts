@@ -11,10 +11,15 @@ export default function ProductsPage() {
   const [filter, setFilter] = useState<'all' | 'favorites'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
+  const [visibleItems, setVisibleItems] = useState(15);
 
   useEffect(() => {
     fetchProducts().catch(() => setLocalError('Failed to load data'));
   }, [fetchProducts]);
+
+  useEffect(() => {
+    setVisibleItems(15);
+  }, [filter, searchQuery]);
 
   const mergedProducts = [...products, ...userProducts];
   
@@ -23,6 +28,9 @@ export default function ProductsPage() {
       product.description.toLowerCase().includes(searchQuery.toLowerCase());
     return filter === 'favorites' ? product.liked && matchesSearch : matchesSearch;
   });
+
+  const displayedProducts = filteredProducts.slice(0, visibleItems);
+  const showLoadMore = filteredProducts.length > visibleItems;
 
   const handleRetry = async () => {
     setLocalError(null);
@@ -51,8 +59,8 @@ export default function ProductsPage() {
         </div>
       </div>
     );
-  } else if (filteredProducts.length > 0) {
-    content = filteredProducts.map(product => (
+  } else if (displayedProducts.length > 0) {
+    content = displayedProducts.map(product => (
       <ProductCard key={product.id} product={product} />
     ));
   } else {
@@ -94,6 +102,15 @@ export default function ProductsPage() {
       <div className="products-page__grid">
         {content}
       </div>
+
+      {!loading && !localError && showLoadMore && (
+        <button 
+          onClick={() => setVisibleItems(prev => prev + 15)}
+          className="products-page__load-more"
+        >
+          Показать еще
+        </button>
+      )}
     </div>
   );
 }
