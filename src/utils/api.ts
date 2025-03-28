@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { Product } from '../types/product'; 
 
 const API_URL = 'https://dummyjson.com/products';
 
-export const fetchWithRetry = async (retries = 3) => {
+export const fetchWithRetry = async (retries = 3): Promise<Product[]> => {
   try {
     const response = await axios.get(API_URL, {
       timeout: 15000,
@@ -17,7 +18,8 @@ export const fetchWithRetry = async (retries = 3) => {
       title: product.title,
       description: product.description,
       price: product.price,
-      image: product.thumbnail
+      image: product.thumbnail,
+      liked: false 
     }));
   } catch (error) {
     if (retries > 0) {
