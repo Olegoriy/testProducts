@@ -12,6 +12,7 @@ export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
   const [visibleItems, setVisibleItems] = useState(15);
+  const [sortOrder, setSortOrder] = useState<'none' | 'asc' | 'desc'>('none');
 
   useEffect(() => {
     fetchProducts().catch(() => setLocalError('Failed to load data'));
@@ -19,7 +20,7 @@ export default function ProductsPage() {
 
   useEffect(() => {
     setVisibleItems(15);
-  }, [filter, searchQuery]);
+  }, [filter, searchQuery, sortOrder]);
 
   const mergedProducts = [...products, ...userProducts];
   
@@ -29,8 +30,14 @@ export default function ProductsPage() {
     return filter === 'favorites' ? product.liked && matchesSearch : matchesSearch;
   });
 
-  const displayedProducts = filteredProducts.slice(0, visibleItems);
-  const showLoadMore = filteredProducts.length > visibleItems;
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortOrder === 'asc') return a.price - b.price;
+    if (sortOrder === 'desc') return b.price - a.price;
+    return 0;
+  });
+
+  const displayedProducts = sortedProducts.slice(0, visibleItems);
+  const showLoadMore = sortedProducts.length > visibleItems;
 
   const handleRetry = async () => {
     setLocalError(null);
@@ -90,6 +97,16 @@ export default function ProductsPage() {
           <option value="all">All Products</option>
           <option value="favorites">Favorites</option>
         </select>
+
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value as 'none' | 'asc' | 'desc')}
+          className="products-page__filter"
+        >
+          <option value="none">Default Order</option>
+          <option value="asc">Price: Low to High</option>
+          <option value="desc">Price: High to Low</option>
+        </select>
         
         <button
           onClick={() => navigate('/create-product')}
@@ -108,7 +125,7 @@ export default function ProductsPage() {
           onClick={() => setVisibleItems(prev => prev + 15)}
           className="products-page__load-more"
         >
-          Показать еще
+          Show more
         </button>
       )}
     </div>
