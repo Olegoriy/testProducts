@@ -32,7 +32,6 @@ export const useStore = create<StoreState>()(
           }));
 
           set(state => {
-            // Сохраняем пользовательские продукты и локальные изменения
             const existingProducts = state.products.filter(p => p.isUserCreated);
             const mergedProducts = normalizedProducts.map(apiProduct => {
               const existing = state.products.find(p => p.id === apiProduct.id);

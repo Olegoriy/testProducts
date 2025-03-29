@@ -4,8 +4,8 @@ import '../styles/components/product-detail.scss';
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const { products, userProducts } = useStore();
-  const product = [...products, ...userProducts].find(p => p.id === Number(id));
+  const { products } = useStore(); 
+  const product = products.find(p => p.id === Number(id));
 
   if (!product) return <div className="product-not-found">Product not found</div>;
 
@@ -23,7 +23,7 @@ export default function ProductDetail() {
         />
         <h1 className="product-detail__title">{product.title}</h1>
         <p className="product-detail__description">{product.description}</p>
-        <p className="product-detail__price">${product.price}</p>
+        <p className="product-detail__price">${product.price.toFixed(2)}</p>
       </div>
     </div>
   );
