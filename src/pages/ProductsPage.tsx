@@ -7,24 +7,27 @@ import '../styles/components/products-page.scss';
 
 export default function ProductsPage() {
   const navigate = useNavigate();
-  const { products, userProducts, fetchProducts, loading } = useStore();
+  const { products, fetchProducts, loading } = useStore();
+  const [initialLoad, setInitialLoad] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
+
   const [filter, setFilter] = useState<'all' | 'favorites'>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [localError, setLocalError] = useState<string | null>(null);
   const [visibleItems, setVisibleItems] = useState(15);
   const [sortOrder, setSortOrder] = useState<'none' | 'asc' | 'desc'>('none');
 
   useEffect(() => {
-    fetchProducts().catch(() => setLocalError('Failed to load data'));
-  }, [fetchProducts]);
+    if (!initialLoad) {
+      setInitialLoad(true);
+      fetchProducts().catch(() => setLocalError('Failed to load data'));
+    }
+  }, [fetchProducts, initialLoad]);
 
   useEffect(() => {
     setVisibleItems(15);
   }, [filter, searchQuery, sortOrder]);
 
-  const mergedProducts = [...products, ...userProducts];
-  
-  const filteredProducts = mergedProducts.filter(product => {
+  const filteredProducts = products.filter(product => {
     const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase());
     return filter === 'favorites' ? product.liked && matchesSearch : matchesSearch;

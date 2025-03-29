@@ -6,20 +6,18 @@ import '../styles/components/product-form.scss';
 
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
-  const { products, userProducts, updateProduct } = useStore();
+  const { products, updateProduct } = useStore();
   const navigate = useNavigate();
   const [productData, setProductData] = useState<Product | null>(null);
 
   useEffect(() => {
-    const allProducts = [...products, ...userProducts];
-    const productToEdit = allProducts.find(p => p.id === Number(id));
-    
+    const productToEdit = products.find(p => p.id === Number(id));
     if (productToEdit) {
       setProductData(productToEdit);
     } else {
       navigate('/products', { replace: true });
     }
-  }, [id, products, userProducts, navigate]);
+  }, [id, products, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +43,6 @@ export default function EditProductPage() {
     <div className="product-form__container">
       <h1>Edit Product</h1>
       <form onSubmit={handleSubmit} className="product-form">
-
         <div className="form-group">
           <label htmlFor="title">Title</label>
           <input
